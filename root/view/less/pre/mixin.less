@@ -1,0 +1,86 @@
+//可以在这里配置自定义变量
+:root {
+}
+
+//准确设置苹果字体
+.appleFont(@font: -apple-system) {
+    & when (@font = PingFangSC-Medium) {
+        -webkit-font-smoothing: antialiased;
+    }
+    font-family: @font, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, 'Helvetica Neue', Helvetica, Arial,
+        'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei UI', 'Microsoft YaHei', 'Source Han Sans CN', sans-serif;
+}
+
+//设置z-index层级
+//同级间层叠调整，1-1000
+//落地页组件, 1001-2000
+//fixed按钮，2001-3000
+//下拉框，3001-4000
+//浮层及弹框：4001-5000
+.z-index(@level, @index: 1, @withShadow: true) {
+    & when (@level = 0) {
+        z-index: @index;
+    }
+    & when (@level = 1) {
+        z-index: @index + @level * 1000;
+    }
+    & when (@level = 2) {
+        z-index: @index + @level * 1000;
+        & when (@withShadow = true) {
+            box-shadow: -2px 1px 6px 1px rgba(0, 0, 0, 0.04);
+        }
+    }
+    & when (@level = 3) {
+        z-index: @index + @level * 1000;
+        & when (@withShadow = true) {
+            box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.06);
+        }
+    }
+    & when (@level = 4) {
+        z-index: @index + @level * 1000;
+        & when (@withShadow = true) {
+            box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.06);
+        }
+    }
+}
+
+//溢出点点点
+.ellipsis {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+//小圆点
+.dot {
+    margin-right: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    vertical-align: middle;
+    display: inline-flex;
+}
+
+// flex 基础写法
+.flex(@justifyContent: flex-start, @alignItems: center) {
+    display: flex;
+    justify-content: @justifyContent;
+    align-items: @alignItems;
+}
+
+// grid 基础写法
+.grid(@gridTemplateColumns: repeat(auto-fill, 1fr), @gridGap: 10px, @alignItems: center) {
+    display: grid;
+    grid-template-columns: @gridTemplateColumns;
+    grid-gap: @gridGap;
+    align-items: center;
+}
+
+// 绝对定位
+.absolute(@top: unset, @right: unset, @bottom: unset, @left: unset) {
+    position: absolute;
+    top: @top;
+    right: @right;
+    bottom: @bottom;
+    left: @left;
+}

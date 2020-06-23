@@ -1,0 +1,13 @@
+npm-debug.log
+yarn-error.log
+node_modules/
+*/node_modules/
+.idea/
+.DS_Store
+*/.DS_Store
+
+# TODO: Will build all to /dist in the feature
+static/
+dist/
+*/dist
+*/static
