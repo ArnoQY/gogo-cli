@@ -4,58 +4,36 @@ gogo-cli 是聚焦于静态打包的、简单的React脚手架
 
 ### 安装
 
-如果之前有安装过，建议 `uninstall` 以后重新安装，因为依赖较多，`update` 可能会残留之前的特性。
-
 ```sh
-npm config set registry http://r.tnpm.oa.com
-npm config set proxy http://127.0.0.1:12639
-npm config set https-proxy http://127.0.0.1:12639
-// 需要全局安装gulp
-sudo npm install -g gulp
-// 依赖构建需要开启npm的root权限
-sudo npm install -g gogo-cli --unsafe-perm=true --allow-root
+
 ```
 
-<br />
-
-### 初始化 init
+### 初始化
 
 gogo-cli 提供快速初始化项目的能力。
 
-确保 `npm` 已设置内网代理及源的前提下，在新项目目录下执行：
+在新项目目录下执行 `gogo init`，即可初始化新项目 `gogo` 会自动完成依赖包安装。
 
-```sh
-gogo init
-```
 
-即可初始化新项目，会自动完成依赖包安装。
+### CLI
 
-在根目录的配置文件 `gogo.config.js` 中，可以指定需要依赖的 `webpack` 文件路径、项目名及版本号等。
+gogo-cli 的设计初衷是为了方便快速启动项目、快速输出静态稿。
 
-未来开放的更多能力也将通过该文件进行配置。
-
-<br />
-
-### 编译打包 start build
-
-gogo-cli 的设计初衷是为了方便【重构】快速启动项目、快速输出静态稿。
-
-因此总体设计上是基于【页面】来打包的，没有路由，不建议前端同学在生产环境使用。
+因此总体设计上是基于【页面】来打包的，没有路由，不建议在生产环境使用。
 
 所有命令由 `gogo` 开头，配置项是根目录的 `gogo.config.js`。
 
 编译打包分为 `build` `start` 两种环境，`-m` `-p` 两种模式:
 
-打包出来的页面模板默认是 `view/template/template.html`，如果在指定目录下也有 `template.html` 的话，则使用指定目录的模板。
-
 #### -m -s 模式
 
-> `-m` 指定父目录，默认 `pages`
-> `-s`(可选) 指定后代目录，无视层级，后代即可。默认为 `/`，即所有后代。
+> `-m` 指定父目录，默认 `pages` > `-s`(可选) 指定后代目录，无视层级，后代即可。默认为 `/`，即所有后代。
 
 该模式会遍历目录下的所有文件夹，每当文件夹下有 `index.js` 时，就将该文件夹作为一个页面来解析。
 
-该模式会将所有 `chunk` 中手动引入的 `less` 文件，以及 `view/less/_export.less` 文件打到一个文件中，最后输出一个 `css`。
+在不需要任何引用的情况下，该模式打包出的所有页面依赖 `view/less/_export.less` 中的样式，`_export` 最终输出为项目的主样式 `style.css`。
+
+如果在 `js` 中单独引用了其他 `less` 文件，被引文件会被单独打包为一个新的 `css` 文件。
 
 #### -p 模式
 
@@ -63,11 +41,7 @@ gogo-cli 的设计初衷是为了方便【重构】快速启动项目、快速�
 
 该模式会读取 `gogo.config.js` 中的 `plusEntry` 属性，将该属性作为入口进行打包，等同于 `webpack.entry`。
 
-为了扩展自由度，摆脱对主样式的依赖，`-p` 模式没有额外的样式依赖。
-
-如果需要引用样式，可以使用数组的方式编写：`['entry.js', '*.less']`，也可以在 `js` 中手动引入。
-
-该模式会将针对每个 `chunk` 分别单独输出一份 `css`。
+为了扩展自由度，摆脱对主样式的依赖，`-p` 模式没有额外的样式依赖，如果需要引用样式，可以使用数组的方式编写：`['entry.js', '*.less']`
 
 #### 举例
 
@@ -82,9 +56,7 @@ gogo-cli 的设计初衷是为了方便【重构】快速启动项目、快速�
 > 开发环境编译 `plusEntry`： `gogo start -p`
 > 生产环境编译 `plusEntry`： `gogo build -p`
 
-<br />
-
-### Icon 处理
+### Icon
 
 gogo-cli 单独针对 icon 做了处理，目的是使 icon 更好管理、内部结构暴露可操作、可任意变色。
 
@@ -105,7 +77,5 @@ gogo-cli 单独针对 icon 做了处理，目的是使 icon 更好管理、内�
 ```jsx
 import Icon from 'components/Icon'
 
-<Icon type='AMS' color='[color]' size='[number]'>
+<Icon type='test' color='[color]' size='[number]'>
 ```
-
-3. `build` 后，将 `icon.bundle.js` 发布至 `CDN`，并提醒前端同学前置引入。
